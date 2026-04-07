@@ -43,6 +43,22 @@ public:
         SegTree[node] = SegTree[2 * node + 1] + SegTree[2 * node + 2];
     }
 
+    int query(int indx, int start, int end, int l, int r) {
+        // No overlap
+        if (end < l || start > r)
+            return 0;
+
+        // Complete overlap
+        if (start >= l && end <= r)
+            return SegTree[indx];
+
+        // Partial overlap
+        int mid = start + (end - start) / 2;
+
+        return query(2 * indx + 1, start, mid, l, r) +
+            query(2 * indx + 2, mid + 1, end, l, r);
+    }
+
 
     void PrintTree() {
         for (int x : SegTree) {
@@ -64,8 +80,7 @@ int main() {
     obj1.buildTree(0, 0, n - 1, arr);
     obj1.PrintTree();
 
-    // cout << obj1.query(0, 0, n - 1, 1, 2) << endl;
-
+    cout << obj1.query(0, 0, n - 1, 1, 2);
 
     return 0;
 }
